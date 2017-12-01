@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.iyunr.mapper.AccessTokenMapper">
+	<insert id="insertAccessToken" parameterType="com.iyunr.entity.AccessToken" useGeneratedKeys="true" keyProperty="id">
+		insert into access_token (access_token, expires_in) values (#{accessToken}, #{expiresIn})
+	</insert>
+	
+	<select id="queryLastToken" resultType="String">
+		SELECT access_token from access_token order by create_time desc limit 1
+	</select>
+</mapper>

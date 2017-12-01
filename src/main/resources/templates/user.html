@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<style type="text/css">
+		table {
+			border-collapse:collapse; 
+			border:solid 1px Black;
+		}
+		table td {
+			border-collapse:collapse; 
+			border:solid 1px Black;
+		}
+		body {text-align:center;}
+		
+	</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row" style="margin-top:18rem;">
+			<img src="${user.headimgurl}" alt="headimg" width="100rem" height="100rem">
+		</div>
+		<div class="row" style="margin-top:3rem;">
+			<table style="margin:auto;">
+				<tr>
+					<td>昵称</td>
+					<td>性别</td>
+					<td>城市</td>
+					<td>国家</td>
+					<td>省份</td>
+					<td>语言</td>
+				</tr>
+				<tr>
+					<td>${user.nickname}</td>
+					<td>${user.sex==1? "男":"女"}</td>
+					<td>${user.city}</td>
+					<td>${user.country}</td>
+					<td>${user.province}</td>
+					<td>${user.language}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

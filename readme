@@ -1,0 +1,182 @@
+项目技术架构：SpringBoot+Druid+Mybatis+beetl
+
+本项目是为了学习微信开发所建立
+
+问题记录：在调试程序的过程中，发现在service中，使用注解@Autowired标注的其他service类和Mapper类不能被注入进来，后来发现问题所在，在所有需要使用注入的地方，不能出现new事例的方式，
+必须统一都使用注解注入，这样注解注入才会生效，然后我在有问题的service中发现了这样的代码：UserService userService = new UserService(); 而在类中还有通过注解注入的代码
+@Autowired UserService userService；这样注解就不起作用了。
+
+----------------------------------------------- 接收消息（http://img.blog.csdn.net/20170728144454320?） -----------------------------------------------
+文本消息
+
+ <xml>
+ <ToUserName><![CDATA[toUser]]></ToUserName>
+ <FromUserName><![CDATA[fromUser]]></FromUserName> 
+ <CreateTime>1348831860</CreateTime>
+ <MsgType><![CDATA[text]]></MsgType>
+ <Content><![CDATA[this is a test]]></Content>
+ <MsgId>1234567890123456</MsgId>
+ </xml>
+
+参数    描述
+ToUserName    开发者微信号
+FromUserName    发送方帐号（一个OpenID）
+CreateTime    消息创建时间 （整型）
+MsgType    text
+Content    文本消息内容
+MsgId    消息id，64位整型
+
+ 
+图片消息
+
+ <xml>
+ <ToUserName><![CDATA[toUser]]></ToUserName>
+ <FromUserName><![CDATA[fromUser]]></FromUserName>
+ <CreateTime>1348831860</CreateTime>
+ <MsgType><![CDATA[image]]></MsgType>
+ <PicUrl><![CDATA[this is a url]]></PicUrl>
+ <MediaId><![CDATA[media_id]]></MediaId>
+ <MsgId>1234567890123456</MsgId>
+ </xml>
+
+参数    描述
+ToUserName    开发者微信号
+FromUserName    发送方帐号（一个OpenID）
+CreateTime    消息创建时间 （整型）
+MsgType    image
+PicUrl    图片链接
+MediaId    图片消息媒体id，可以调用多媒体文件下载接口拉取数据。
+MsgId    消息id，64位整型
+
+ 
+语音消息
+
+<xml>
+<ToUserName><![CDATA[toUser]]></ToUserName>
+<FromUserName><![CDATA[fromUser]]></FromUserName>
+<CreateTime>1357290913</CreateTime>
+<MsgType><![CDATA[voice]]></MsgType>
+<MediaId><![CDATA[media_id]]></MediaId>
+<Format><![CDATA[Format]]></Format>
+<MsgId>1234567890123456</MsgId>
+</xml>
+
+参数    描述
+ToUserName    开发者微信号
+FromUserName    发送方帐号（一个OpenID）
+CreateTime    消息创建时间 （整型）
+MsgType    语音为voice
+MediaId    语音消息媒体id，可以调用多媒体文件下载接口拉取数据。
+Format    语音格式，如amr，speex等
+MsgID    消息id，64位整型
+
+ 
+
+请注意，开通语音识别后，用户每次发送语音给公众号时，微信会在推送的语音消息XML数据包中，增加一个Recongnition字段 （注：由于客户端缓存，开发者开启或者关闭语音识别功能，对新关注者立刻生效，对已关注用户需要24小时生效。开发者可以重新关注此帐号进行测试）。开启 语音识别后的语音XML数据包如下：
+
+<xml>
+<ToUserName><![CDATA[toUser]]></ToUserName>
+<FromUserName><![CDATA[fromUser]]></FromUserName>
+<CreateTime>1357290913</CreateTime>
+<MsgType><![CDATA[voice]]></MsgType>
+<MediaId><![CDATA[media_id]]></MediaId>
+<Format><![CDATA[Format]]></Format>
+<Recognition><![CDATA[腾讯微信团队]]></Recognition>
+<MsgId>1234567890123456</MsgId>
+</xml>
+
+多出的字段中，Format为语音格式，一般为amr，Recognition为语音识别结果，使用UTF8编码。
+视频消息
+
+<xml>
+<ToUserName><![CDATA[toUser]]></ToUserName>
+<FromUserName><![CDATA[fromUser]]></FromUserName>
+<CreateTime>1357290913</CreateTime>
+<MsgType><![CDATA[video]]></MsgType>
+<MediaId><![CDATA[media_id]]></MediaId>
+<ThumbMediaId><![CDATA[thumb_media_id]]></ThumbMediaId>
+<MsgId>1234567890123456</MsgId>
+</xml>
+
+参数    描述
+ToUserName    开发者微信号
+FromUserName    发送方帐号（一个OpenID）
+CreateTime    消息创建时间 （整型）
+MsgType    视频为video
+MediaId    视频消息媒体id，可以调用多媒体文件下载接口拉取数据。
+ThumbMediaId    视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
+MsgId    消息id，64位整型
+
+ 
+小视频消息
+
+<xml>
+<ToUserName><![CDATA[toUser]]></ToUserName>
+<FromUserName><![CDATA[fromUser]]></FromUserName>
+<CreateTime>1357290913</CreateTime>
+<MsgType><![CDATA[shortvideo]]></MsgType>
+<MediaId><![CDATA[media_id]]></MediaId>
+<ThumbMediaId><![CDATA[thumb_media_id]]></ThumbMediaId>
+<MsgId>1234567890123456</MsgId>
+</xml>
+
+参数    描述
+ToUserName    开发者微信号
+FromUserName    发送方帐号（一个OpenID）
+CreateTime    消息创建时间 （整型）
+MsgType    小视频为shortvideo
+MediaId    视频消息媒体id，可以调用多媒体文件下载接口拉取数据。
+ThumbMediaId    视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
+MsgId    消息id，64位整型
+
+ 
+地理位置消息
+
+<xml>
+<ToUserName><![CDATA[toUser]]></ToUserName>
+<FromUserName><![CDATA[fromUser]]></FromUserName>
+<CreateTime>1351776360</CreateTime>
+<MsgType><![CDATA[location]]></MsgType>
+<Location_X>23.134521</Location_X>
+<Location_Y>113.358803</Location_Y>
+<Scale>20</Scale>
+<Label><![CDATA[位置信息]]></Label>
+<MsgId>1234567890123456</MsgId>
+</xml> 
+
+参数    描述
+ToUserName    开发者微信号
+FromUserName    发送方帐号（一个OpenID）
+CreateTime    消息创建时间 （整型）
+MsgType    location
+Location_X    地理位置维度
+Location_Y    地理位置经度
+Scale    地图缩放大小
+Label    地理位置信息
+MsgId    消息id，64位整型
+
+ 
+链接消息
+
+<xml>
+<ToUserName><![CDATA[toUser]]></ToUserName>
+<FromUserName><![CDATA[fromUser]]></FromUserName>
+<CreateTime>1351776360</CreateTime>
+<MsgType><![CDATA[link]]></MsgType>
+<Title><![CDATA[公众平台官网链接]]></Title>
+<Description><![CDATA[公众平台官网链接]]></Description>
+<Url><![CDATA[url]]></Url>
+<MsgId>1234567890123456</MsgId>
+</xml> 
+
+参数    描述
+ToUserName    接收方微信号
+FromUserName    发送方微信号，若为普通用户，则是一个OpenID
+CreateTime    消息创建时间
+MsgType    消息类型，link
+Title    消息标题
+Description    消息描述
+Url    消息链接
+MsgId    消息id，64位整型
+----------------------------------------------- 接收消息 -----------------------------------------------
+
