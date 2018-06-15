@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 /**
- * @Description: TODO 登录工具类
+ * @Description: TODO 登录工具类，使用sha1加密验证
  * @author Administrator  
  * @date 2017年11月3日
  */

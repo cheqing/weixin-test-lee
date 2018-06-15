@@ -56,6 +56,8 @@ public class WxMainController {
 		String nonce = request.getParameter("nonce");	//随机数
 		String echostr = request.getParameter("echostr");	//随机字符串
 		System.out.println(signature+", "+timestamp+", "+nonce+", "+echostr);
+		
+//		校验成功则返回echostr，否则失败
 		if(SignUtil.validSign(signature, token, timestamp, nonce)){
 			logger.info("微信接入成功！");
 			return echostr;
